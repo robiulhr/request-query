@@ -1,9 +1,9 @@
-import { interceptorFuncType } from "./type";
-import { isFunction, isObject } from "./utils";
+import { interceptorFuncType } from "../type";
+import { isFunction, isObject } from "../utils";
 
-type addInterceptorType = (type: "request" | "response", interceptor: () => interceptorFuncType | object) => void;
+type useInterceptorType = (type: "request" | "response", interceptor: () => interceptorFuncType | object) => void;
 
-const addInterceptor: addInterceptorType = (type, interceptor) => {
+const useInterceptor: useInterceptorType = (type, interceptor) => {
   if (type !== "request" && type !== "response") return "";
   if (isObject(interceptor)) {
     // if the interceptor is an object
@@ -17,4 +17,4 @@ const addInterceptor: addInterceptorType = (type, interceptor) => {
   }
 };
 
-export default addInterceptor;
+export default useInterceptor;

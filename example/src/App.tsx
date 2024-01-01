@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { useRequestQuery } from "../../src/requestQuery";
+import requestQuery from "../../src/requestQuery";
 import { PostDataType } from "./type";
 import environment from "./environments";
 
 function App() {
   const [data, setData] = useState<PostDataType | null>();
-  const { response, error, loading, cancelRequest } = useRequestQuery<PostDataType>({
+  const requestInstance = requestQuery.create({ baseURL: environment.baseUrl });
+  const { response, error, loading, cancelRequest } = requestInstance.request({
     timeout: 3000,
     baseURL: environment.baseUrl,
-    method: "post",
+    method: "get",
     url: "/posts",
     timeoutErrorMessage: "Timeout Error.",
-    headers: { accept: "*/*" },
-    data: {
-      userId: 1,
-      id: 19392,
-      title: "title",
-      body: "Sample text",
-    },
   });
   useEffect(() => {
     if (response !== null) {
@@ -29,10 +23,10 @@ function App() {
   return (
     <>
       <h1>Here is the response below:</h1>
-      {/* {data &&
+      {data &&
         data.map((ele) => {
           return <div key={ele.title}>{ele.title}</div>;
-        })} */}
+        })}
       {console.log(data)}
       {loading && <h4>loading...</h4>}
       {error && <h6>something went wrong.</h6>}

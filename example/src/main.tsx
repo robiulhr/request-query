@@ -6,7 +6,7 @@ import { TestApp } from "./classCompTest.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* <App /> */}
-    <TestApp />
+    <App />
+    {/* <TestApp /> */}
   </React.StrictMode>
 );
