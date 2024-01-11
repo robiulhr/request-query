@@ -1,32 +1,48 @@
-name: Publish Package
+name: Node.js Package
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: "14"
+          node-version: 12
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - run: npm test
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Publish to GitHub Packages and npm
-        run: |
-          echo "Publishing to GitHub Packages..."
-          npm publish --access public --registry https://npm.pkg.github.com/robiulhr
-
-          echo "Publishing to npm..."
-          npm publish --registry https://registry.npmjs.org/
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          scope: "@robiulhr"
+      - run: npm ci
+      - run: echo registry=https://npm.pkg.github.com/robiulhr >> .npmrc
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GITHUB_TOKEN}}
