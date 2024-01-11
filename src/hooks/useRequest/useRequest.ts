@@ -1,12 +1,13 @@
+import { RequestQueryType } from "../../type";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export default function requestMethod(axiosParams: AxiosRequestConfig) {
+export default function useRequestMethod<T>(this: RequestQueryType, axiosParams: AxiosRequestConfig) {
   // Check the axiosParams validity
   // Check the queryInstance exist or not
   if (!this.queryInstance && !axiosParams.baseURL) throw new Error("please provide the baseUrl");
   const [response, setResponse] = useState<T | null>(null);
-  const [error, setError] = useState<AxiosError | unknown>();
+  const [error, setError] = useState<AxiosError | object>();
   const [loading, setLoading] = useState(true);
   const abortControllerRef = useRef(new AbortController());
   const setTimeOutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
@@ -31,7 +32,7 @@ export default function requestMethod(axiosParams: AxiosRequestConfig) {
       .then((res: AxiosResponse) => {
         setResponse(res.data);
       })
-      .catch((err: AxiosError) => {
+      .catch((err: AxiosError | any) => {
         // this will narrow the type :)
         // Access to config, request, and response
         if (axios.isAxiosError(err)) {
@@ -53,7 +54,7 @@ export default function requestMethod(axiosParams: AxiosRequestConfig) {
           console.log(err.config);
           setError(err.toJSON());
         } else {
-          setError(err.toJson());
+          setError(err?.toJson());
           // Just a stock error
         }
       })

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import requestQuery from "../../src/requestQuery";
+import requestQuery from "@robiulhr/request-query";
 import { PostDataType } from "./type";
 import environment from "./environments";
 

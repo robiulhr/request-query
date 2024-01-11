@@ -46,7 +46,7 @@ export const authResInterceptor = function () {
       console.log("got response");
       return response;
     },
-    errorHandler: (error: AxiosError) => {
+    errorHandler: (error: AxiosError | any) => {
       console.warn("Error status", error);
       if (error.response) {
         if ((error.response?.data?.message as string) === "Unauthorized") {
