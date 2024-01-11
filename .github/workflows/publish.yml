@@ -7,27 +7,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12, 14, 16]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-
+          node-version: "16"
       - name: Install dependencies
         run: npm ci
-
       - name: Build
         run: npm run build
-
       - name: Lint
         run: npm run lint
-
       - name: Test
         run: npm test
 
@@ -36,43 +28,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: "16"
           registry-url: https://registry.npmjs.org/
-
       - name: Install dependencies
         run: npm ci
-
       - name: Publish to npm
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
 
   publish-gpr:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
-
+        uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: "16"
           registry-url: https://npm.pkg.github.com/
           scope: "@robiulhr"
-
       - name: Install dependencies
         run: npm ci
-
       - name: Configure .npmrc
         run: echo registry=https://npm.pkg.github.com/robiulhr >> .npmrc
-
       - name: Publish to GitHub Package Registry
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GITHUB_TOKEN}}
+
+  typescript-check:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install dependencies
+        run: npm ci
+      - name: TypeScript type checking
+        run: npm run tsc --noEmit
