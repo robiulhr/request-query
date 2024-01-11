@@ -21,17 +21,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Publish to GitHub Packages
-        run: npm publish --access public --registry https://npm.pkg.github.com/robiulhr
-
-      - name: Publish to npm
-        if: "!contains(github.event.head_commit.message, '[skip npm]')"
+      - name: Publish to GitHub Packages and npm
         run: |
-          if [ "$(npm version patch)" != "0.0.0" ]; then
-            echo "Publishing to npm..."
-            npm publish --registry https://registry.npmjs.org/
-          else
-            echo "Skipping npm publish (version is 0.0.0)."
-          fi
+          echo "Publishing to GitHub Packages..."
+          npm publish --access public --registry https://npm.pkg.github.com/robiulhr
+
+          echo "Publishing to npm..."
+          npm publish --registry https://registry.npmjs.org/
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
