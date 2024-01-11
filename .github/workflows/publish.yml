@@ -1,32 +1,78 @@
-name: Publish Package
+name: Node.js Package
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [12, 14, 16]
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
-          node-version: "14"
+          node-version: ${{ matrix.node-version }}
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Publish to GitHub Packages and npm
-        run: |
-          echo "Publishing to GitHub Packages..."
-          npm publish --access public --registry https://npm.pkg.github.com/robiulhr
+      - name: Build
+        run: npm run build
 
-          echo "Publishing to npm..."
-          npm publish --registry https://registry.npmjs.org/
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish to npm
+        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_NPM_TOKEN }}
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          scope: "@robiulhr"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure .npmrc
+        run: echo registry=https://npm.pkg.github.com/robiulhr >> .npmrc
+
+      - name: Publish to GitHub Package Registry
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PUBLISH_GITHUB_TOKEN }}

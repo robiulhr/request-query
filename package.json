@@ -1,12 +1,9 @@
 {
-  "name": "@robiulhr/request-query",
-  "version": "1.0.17",
+  "name": "request-query",
+  "version": "1.0.20",
   "description": "Simple and powerful API client for react 👍 Use hooks fetch data in easy way. Just react and axios under the hood.",
   "url": "https://robiul.dev",
   "homepage": "https://github.com/owner/project#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/robiulhr"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/robiulhr/request-query.git"
@@ -14,9 +11,7 @@
   "type": "module",
   "main": "dist/cjs/index.js",
   "scripts": {
-    "rollup": "rollup -c",
-    "publish-github": "npm publish --access public --registry https://npm.pkg.github.com/robiulhr",
-    "publish-npm": "npm publish --registry https://registry.npmjs.org/"
+    "rollup": "rollup -c"
   },
   "funding": {
     "type": "buymeacoffee",
