@@ -10,16 +10,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install dependencies
         run: npm ci
+
       - name: Build
         run: npm run build
+
       - name: Lint
         run: npm run lint
+
       - name: Test
         run: npm test
 
@@ -29,13 +44,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
           registry-url: https://registry.npmjs.org/
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install dependencies
         run: npm ci
+
       - name: Publish to npm
         run: npm publish --access public
         env:
@@ -47,16 +75,30 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
           registry-url: https://npm.pkg.github.com/
           scope: "@robiulhr"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install dependencies
         run: npm ci
+
       - name: Configure .npmrc
         run: echo registry=https://npm.pkg.github.com/robiulhr >> .npmrc
+
       - name: Publish to GitHub Package Registry
         run: npm publish
         env:
@@ -68,11 +110,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "16"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-
+
       - name: Install dependencies
         run: npm ci
+
       - name: TypeScript type checking
         run: npm run tsc --noEmit
