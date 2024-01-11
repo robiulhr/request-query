@@ -1,16 +1,35 @@
 {
-  "name": "@robiulhr/request-query",
-  "version": "1.0.1",
-  "description": "",
+  "name": "request-query",
+  "version": "1.0.4",
+  "description": "Simple and powerful API client for react 👍 Use hooks fetch data in easy way. Just react and axios under the hood.",
+  "url": "https://robiul.dev",
+  "homepage": "https://github.com/owner/project#readme",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/robiulhr"
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robiulhr/request-query.git"
   },
   "type": "module",
   "main": "dist/cjs/index.js",
   "scripts": {
-    "rollup": "rollup -c"
+    "rollup": "rollup -c",
+    "publish": "npm version patch && npm publish --registry=https://npm.pkg.github.com/OWNER && npm publish --registry=https://registry.npmjs.org/"
   },
-  "keywords": [],
+  "funding": {
+    "type": "buymeacoffee",
+    "url": "https://www.buymeacoffee.com/robiulhr"
+  },
+  "keywords": [
+    "request-query",
+    "typescript",
+    "node js",
+    "axios",
+    "javascript",
+    "react",
+    "react-dom"
+  ],
   "author": "Robiul H.",
   "license": "ISC",
   "devDependencies": {
@@ -29,6 +48,9 @@
   "files": [
     "dist"
   ],
+  "bugs": {
+    "url": "https://github.com/robiulhr/request-query/issues"
+  },
   "types": "dist/index.d.ts",
   "dependencies": {
     "@types/axios": "^0.14.0",
