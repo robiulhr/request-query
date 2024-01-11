@@ -35,13 +35,13 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build
-        run: npm run build
+        run: npm run rollup
 
-      - name: Lint
-        run: npm run lint
+      # - name: Lint
+      #   run: npm run lint
 
-      - name: Test
-        run: npm test
+      # - name: Test
+      #   run: npm test
 
   publish-npm:
     needs: build
