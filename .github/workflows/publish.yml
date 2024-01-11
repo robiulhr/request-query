@@ -32,7 +32,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
@@ -68,7 +68,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Publish to npm
         run: npm publish --access public
@@ -101,7 +101,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Configure .npmrc
         run: echo registry=https://npm.pkg.github.com/robiulhr >> .npmrc
@@ -135,7 +135,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: TypeScript type checking
         run: npm run tsc --noEmit
